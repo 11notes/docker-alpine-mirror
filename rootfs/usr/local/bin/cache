@@ -1,0 +1,72 @@
+#!/bin/ash
+  SOURCE="rsync://rsync.alpinelinux.org/alpine"
+  DESTINATION="/nginx/www"
+
+  RSYNC_INCLUDE=""
+  GREP_MATCH=""
+
+  rm -rf ${DESTINATION}/default
+
+  for VERSION in ${DESTINATION}/*/; do
+    echo "${VERSION}"
+    VERSION=$(echo "${VERSION}" | sed -n "s#${DESTINATION}/\(\S*\)/#\1#p")
+    if [ -z "${RSYNC_INCLUDE}" ]; then
+      GREP_MATCH="${VERSION}"
+      RSYNC_INCLUDE="--include=${VERSION} --include=${VERSION}/**"
+    else
+      GREP_MATCH="${GREP_MATCH}||${VERSION}"
+      RSYNC_INCLUDE="${RSYNC_INCLUDE} --include=${VERSION} --include=${VERSION}/**"
+    fi
+  done
+
+  case "${1}" in
+    *)
+      if [ ! -z "${RSYNC_INCLUDE}" ]; then
+        if [ ! $(pgrep -x rsync) ]; then
+          /usr/bin/rsync \
+            --info=progress2 \
+            --archive \
+            --update \
+            --hard-links \
+            --delete \
+            --delete-after \
+            --delay-updates \
+            --timeout=600 \
+            ${RSYNC_INCLUDE} \
+            --exclude='*' \
+            ${SOURCE}/ ${DESTINATION}
+        fi
+      fi
+    ;;
+
+    mqtt)
+      if [ ! -z "${RSYNC_INCLUDE}" ]; then
+        if [ ! $(pgrep -x rsync) ]; then
+          if [ -n "${3}" ] && [ -d "${DESTINATION}/${3%/*}" ]; then
+            SOURCE="${SOURCE}/${3%/}/"
+            DESTINATION="${DESTINATION}/${3%/}/"
+          fi
+
+          if echo "${SOURCE}" | grep -Eiq "${GREP_MATCH}"; then
+            /usr/bin/rsync \
+              --info=progress2 \
+              --archive \
+              --update \
+              --hard-links \
+              --delete \
+              --delete-after \
+              --delay-updates \
+              --timeout=600 \
+              ${SOURCE}/ ${DESTINATION}
+          fi
+        fi     
+      fi
+    ;;
+
+    size)
+      if [ ! -z "${RSYNC_INCLUDE}" ]; then
+        RSYNC_SIZE=$(rsync -anh --stats ${RSYNC_INCLUDE} --exclude='*' ${SOURCE}/ /tmp | sed -n "s/Total file size: \(\S*\) bytes/\1/p")
+        echo "Size: ${RSYNC_SIZE}"
+      fi
+    ;;
+  esac
