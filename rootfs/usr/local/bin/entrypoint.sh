@@ -19,7 +19,7 @@ server {
   } 
 
   location /favicon.ico {
-    try_files $uri favicon.ico;
+    try_files \$uri favicon.ico;
   }
 
   %INCLUDE%
