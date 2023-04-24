@@ -31,7 +31,7 @@ EOF
   NGINX_INCLUDE=""
 
   for VERSION in "$@"; do
-    mkdir -p /nginx/www/${VERSION}
+    mkdir -p /mirror/var/${VERSION}
     VERSION_ESC=$(echo ${VERSION} | sed "s/\./\\\./")
     NGINX_INCLUDE="${NGINX_INCLUDE}location ~* /${VERSION_ESC} {}\n\  "
   done
