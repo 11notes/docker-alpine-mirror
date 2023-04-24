@@ -9,7 +9,7 @@ server {
   root /mirror/var;
   autoindex on;
 
-  error_log off;
+  error_log /dev/null;
   access_log /var/log/nginx/access.log local;
 
   location / {
