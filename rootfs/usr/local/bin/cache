@@ -1,6 +1,6 @@
 #!/bin/ash
   SOURCE="rsync://rsync.alpinelinux.org/alpine"
-  DESTINATION="/nginx/www"
+  DESTINATION="/mirror/var"
 
   RSYNC_INCLUDE=""
   GREP_MATCH=""
@@ -8,7 +8,6 @@
   rm -rf ${DESTINATION}/default
 
   for VERSION in ${DESTINATION}/*/; do
-    echo "${VERSION}"
     VERSION=$(echo "${VERSION}" | sed -n "s#${DESTINATION}/\(\S*\)/#\1#p")
     if [ -z "${RSYNC_INCLUDE}" ]; then
       GREP_MATCH="${VERSION}"
