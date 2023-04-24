@@ -23,6 +23,7 @@
     *)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         if [ ! $(pgrep -x rsync) ]; then
+          echo "$(date +'%Y-%m-%d %T') CACHE :: Start syncing (full)"
           /usr/bin/rsync \
             --info=progress2 \
             --archive \
@@ -35,6 +36,8 @@
             ${RSYNC_INCLUDE} \
             --exclude='*' \
             ${SOURCE}/ ${DESTINATION}
+        else
+          echo "$(date +'%Y-%m-%d %T') CACHE :: Could not start additional sync, sync already running"
         fi
       fi
     ;;
@@ -45,6 +48,9 @@
           if [ -n "${3}" ] && [ -d "${DESTINATION}/${3%/*}" ]; then
             SOURCE="${SOURCE}/${3%/}/"
             DESTINATION="${DESTINATION}/${3%/}/"
+            echo "$(date +'%Y-%m-%d %T') CACHE :: Start syncing updated package ${3}"
+          else
+            echo "$(date +'%Y-%m-%d %T') CACHE :: Start syncing (full)"
           fi
 
           if echo "${SOURCE}" | grep -Eiq "${GREP_MATCH}"; then
@@ -59,14 +65,16 @@
               --timeout=600 \
               ${SOURCE}/ ${DESTINATION}
           fi
-        fi     
+        else
+          echo "$(date +'%Y-%m-%d %T') CACHE :: Could not start additional sync, sync already running"
+        fi    
       fi
     ;;
 
     size)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         RSYNC_SIZE=$(rsync -anh --stats ${RSYNC_INCLUDE} --exclude='*' ${SOURCE}/ /tmp | sed -n "s/Total file size: \(\S*\) bytes/\1/p")
-        echo "Size: ${RSYNC_SIZE}"
+        echo "$(date +'%Y-%m-%d %T') CACHE :: Size to be synced ${RSYNC_SIZE}"
       fi
     ;;
   esac
