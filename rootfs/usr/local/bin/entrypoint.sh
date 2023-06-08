@@ -26,7 +26,7 @@ server {
 
   include /mirror/etc/*.conf;
 }
-EOF &> /dev/null
+EOF
 
   NGINX_INCLUDE=""
 
