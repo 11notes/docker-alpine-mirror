@@ -4,7 +4,12 @@
 # :: Run
 	USER root
 
-	# :: prepare
+  # :: update image
+    RUN set -ex; \
+      apk update; \
+      apk upgrade;
+
+	# :: prepare image
 		RUN set -ex; \
       mkdir -p /mirror/etc; \
       mkdir -p /mirror/var; \
@@ -12,17 +17,19 @@
         rsync \
         mqtt-exec;
 
-  # :: copy root filesystem changes
-    ADD ./rootfs /
-    RUN set -ex; chmod +x -R /usr/local/bin
+  # :: copy root filesystem changes and add execution rights to init scripts
+    COPY ./rootfs /
+    RUN set -ex; \
+      chmod +x -R /usr/local/bin
 
-	# :: docker -u 1000:1000 (no root initiative)
-		RUN set -ex; \
-			chown nginx:nginx -R \
-				/mirror;
+  # :: change home path for existing user and set correct permission
+    RUN set -ex; \
+      usermod -d /mirror docker; \
+      chown -R 1000:1000 \
+        /mirror;
 
 # :: Volumes
 	VOLUME ["/mirror/etc", "/mirror/var"]
 
 # :: Start
-  USER nginx
+  USER docker
