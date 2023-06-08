@@ -1,7 +1,7 @@
 #!/bin/ash
   tee /nginx/etc/default.conf <<EOF
-log_format proxy escape=json '{"destination":"remote", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status}';
-log_format local escape=json '{"destination":"local", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status}';
+log_format alpine_mirror_proxy escape=json '{"destination":"remote", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status}';
+log_format alpine_mirror_local escape=json '{"destination":"local", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status}';
 
 server {
   listen 8080 default_server;
@@ -10,10 +10,10 @@ server {
   autoindex on;
 
   error_log /dev/null;
-  access_log /var/log/nginx/access.log local;
+  access_log /var/log/nginx/access.log alpine_mirror_local;
 
   location / {
-    access_log /var/log/nginx/access.log proxy;
+    access_log /var/log/nginx/access.log alpine_mirror_proxy;
     resolver 208.67.222.222 208.67.220.220;
     proxy_pass http://dl-cdn.alpinelinux.org/alpine\$request_uri;
   } 
