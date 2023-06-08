@@ -1,7 +1,7 @@
 #!/bin/ash
   tee /nginx/etc/default.conf <<EOF
-log_format alpine_mirror_proxy escape=json '{"destination":"remote", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status}';
-log_format alpine_mirror_local escape=json '{"destination":"local", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status}';
+log_format alpine_mirror_proxy escape=json '{"app":"nginx","destination":"remote", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status, "time":"\$time_iso8601"}';
+log_format alpine_mirror_local escape=json '{"app":"nginx","destination":"local", "client":"\$http_x_forwarded_for", "url":"\$request_uri", "status":\$status, "time":"\$time_iso8601"}';
 
 server {
   listen 8080 default_server;
@@ -26,7 +26,7 @@ server {
 
   include /mirror/etc/*.conf;
 }
-EOF
+EOF &> /dev/null
 
   NGINX_INCLUDE=""
 

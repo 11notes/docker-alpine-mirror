@@ -26,7 +26,8 @@
     RUN set -ex; \
       usermod -d /mirror docker; \
       chown -R 1000:1000 \
-        /mirror;
+        /mirror \
+        /nginx/etc;
 
 # :: Volumes
 	VOLUME ["/mirror/etc", "/mirror/var"]

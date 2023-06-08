@@ -20,7 +20,7 @@
     *)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         if [ ! $(pgrep -x rsync) ]; then
-          echo "$(date +'%Y-%m-%d %T') CACHE :: Start syncing (full)"
+          echo "{\"app\":\"mirror\",\"message\":\"start syncing (full)\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
           /usr/bin/rsync \
             --info=progress2 \
             --archive \
@@ -34,7 +34,7 @@
             --exclude='*' \
             ${SOURCE}/ ${DESTINATION}
         else
-          echo "$(date +'%Y-%m-%d %T') CACHE :: Could not start additional sync, sync already running"
+          echo "{\"app\":\"mirror\",\"message\":\"could not start additional sync, sync already running\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
         fi
       fi
     ;;
@@ -45,9 +45,9 @@
           if [ -n "${3}" ] && [ -d "${DESTINATION}/${3%/*}" ]; then
             SOURCE="${SOURCE}/${3%/}/"
             DESTINATION="${DESTINATION}/${3%/}/"
-            echo "$(date +'%Y-%m-%d %T') CACHE :: Start syncing updated package ${3}"
+            echo "{\"app\":\"mirror\",\"message\":\"start syncing updated package ${3}\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
           else
-            echo "$(date +'%Y-%m-%d %T') CACHE :: Start syncing (full)"
+            echo "{\"app\":\"mirror\",\"message\":\"start syncing (full)\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
           fi
 
           if echo "${SOURCE}" | grep -Eiq "${GREP_MATCH}"; then
@@ -63,7 +63,7 @@
               ${SOURCE}/ ${DESTINATION}
           fi
         else
-          echo "$(date +'%Y-%m-%d %T') CACHE :: Could not start additional sync, sync already running"
+          echo "{\"app\":\"mirror\",\"message\":\"could not start additional sync, sync already running\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
         fi    
       fi
     ;;
@@ -71,7 +71,7 @@
     size)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         RSYNC_SIZE=$(rsync -anh --stats ${RSYNC_INCLUDE} --exclude='*' ${SOURCE}/ /tmp | sed -n "s/Total file size: \(\S*\) bytes/\1/p")
-        echo "$(date +'%Y-%m-%d %T') CACHE :: Size to be synced ${RSYNC_SIZE}"
+        echo "{\"app\":\"mirror\",\"message\":\"size to be synced ${RSYNC_SIZE}\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
       fi
     ;;
   esac
