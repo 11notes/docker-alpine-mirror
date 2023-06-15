@@ -1,21 +1,21 @@
 # :: Header
-	FROM 11notes/nginx:stable
+  FROM 11notes/nginx:stable
   ENV HEALTHCHECK_URL=/ping
   ENV APP_ROOT=/mirror
 
 # :: Run
-	USER root
+  USER root
 
   # :: update image
     RUN set -ex; \
       apk update; \
       apk upgrade;
 
-	# :: prepare image
-		RUN set -ex; \
+  # :: prepare image
+    RUN set -ex; \
       mkdir -p ${APP_ROOT}/etc; \
       mkdir -p ${APP_ROOT}/var; \
-			apk add --update --no-cache \
+      apk add --update --no-cache \
         rsync \
         mqtt-exec;
 
@@ -31,7 +31,7 @@
         ${APP_ROOT};
 
 # :: Volumes
-	VOLUME ["${APP_ROOT}/etc", "${APP_ROOT}/var"]
+VOLUME ["${APP_ROOT}/etc", "${APP_ROOT}/var"]
 
 # :: Start
-  USER docker
+USER docker

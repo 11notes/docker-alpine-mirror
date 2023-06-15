@@ -1,5 +1,5 @@
-log_format alpine_mirror_proxy escape=json '{"app":"nginx","destination":"remote", "client":"$remote_addr", "url":"$request_uri", "status":$status, "time":"$time_iso8601"}';
-log_format alpine_mirror_local escape=json '{"app":"nginx","destination":"local", "client":"$remote_addr", "url":"$request_uri", "status":$status, "time":"$time_iso8601"}';
+log_format alpine_mirror_proxy escape=json '{"app":"nginx","destination":"remote", "client":{"ip":"$remote_addr", "x-forwarded-for":"$http_x_forwarded_for", "user":"$remote_user"}, "url":"$request_uri", "status":$status, "time":"$time_iso8601"}';
+log_format alpine_mirror_local escape=json '{"app":"nginx","destination":"local", "client":{"ip":"$remote_addr", "x-forwarded-for":"$http_x_forwarded_for", "user":"$remote_user"}, "url":"$request_uri", "status":$status, "time":"$time_iso8601"}';
 
 map $request $alpine_mirror_log {
     ~*/v[0-9]+ 1;
