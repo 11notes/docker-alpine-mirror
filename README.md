@@ -1,5 +1,5 @@
 # Alpine :: Mirror
-Run an Alpine Mirror based on Alpine Linux. Small, lightweight, secure and fast.
+Run an Alpine Mirror based on Alpine Linux. Small, lightweight, secure and fast 🏔️
 
 ## Volumes
 * **/mirror/etc** - Directory of additional nginx configurations
@@ -27,8 +27,8 @@ docker run --name mirror \
 * [11notes/nginx:stable](https://github.com/11notes/docker-nginx)
 
 ## Built with
-* [Alpine Linux Mirror](https://dl-cdn.alpinelinux.org/alpine/)
-* [Alpine Linux](https://alpinelinux.org/)
+* [Alpine Linux Mirror](https://dl-cdn.alpinelinux.org/alpine)
+* [Alpine Linux](https://alpinelinux.org)
 
 ## Tips
 * Don't bind to ports < 1024 (requires root), use NAT/reverse proxy
