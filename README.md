@@ -24,6 +24,7 @@ docker run --name mirror \
 | `user` | docker | user docker |
 | `uid` | 1000 | user id 1000 |
 | `gid` | 1000 | group id 1000 |
+| `home` | /mirror | home directory of user docker |
 
 ## Use
 ```shell
