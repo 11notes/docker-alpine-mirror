@@ -26,6 +26,11 @@ docker run --name mirror \
 | `gid` | 1000 | group id 1000 |
 | `home` | /mirror | home directory of user docker |
 
+## Environment
+| Parameter | Value | Default |
+| --- | --- | --- |
+| `DNS_NAMESERVERS` | space separated list of DNS servers | 208.67.222.222 208.67.220.220 |
+
 ## Use
 ```shell
 docker exec mirror cache sync
