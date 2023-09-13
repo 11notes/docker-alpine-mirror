@@ -1,6 +1,8 @@
 # Alpine :: Mirror
 Run an Alpine Mirror based on Alpine Linux. Small, lightweight, secure and fast 🏔️
 
+The mirror will only cache the versions you specified during start or the folders which are present in /mirror/var.
+
 ## Volumes
 * **/mirror/etc** - Directory of additional nginx configurations
 * **/mirror/var** - Directory of all mirror data
@@ -23,13 +25,15 @@ docker run --name mirror \
 | `uid` | 1000 | user id 1000 |
 | `gid` | 1000 | group id 1000 |
 
+## Use
+```shell
+docker exec mirror cache
+```
+This will start the caching of all versions present in /mirror/var. You can call this in a regular interval or listen to the MQTT events on msg.alpinelinux.org.
+
 ## Parent
 * [11notes/nginx:stable](https://github.com/11notes/docker-nginx)
 
 ## Built with
 * [Alpine Linux Mirror](https://dl-cdn.alpinelinux.org/alpine)
 * [Alpine Linux](https://alpinelinux.org)
-
-## Tips
-* Don't bind to ports < 1024 (requires root), use NAT/reverse proxy
-* [Permanent Stroage](https://github.com/11notes/alpine-docker-netshare) - Module to store permanent container data via NFS/CIFS and more

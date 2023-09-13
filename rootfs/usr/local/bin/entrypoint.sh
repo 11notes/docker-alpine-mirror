@@ -10,5 +10,4 @@
   cp /nginx/etc/default.conf.tpl /nginx/etc/default.conf
   sed -i "s#\$INCLUDE#${NGINX_INCLUDE}#" /nginx/etc/default.conf
 
-  mqtt-exec -h msg.alpinelinux.org -t rsync/rsync.alpinelinux.org/# -v -- cache mqtt -i buildozer &
   exec nginx -g 'daemon off;'

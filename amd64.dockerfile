@@ -6,18 +6,13 @@
 # :: Run
   USER root
 
-  # :: update image
-    RUN set -ex; \
-      apk update; \
-      apk upgrade;
-
   # :: prepare image
     RUN set -ex; \
       mkdir -p ${APP_ROOT}/etc; \
       mkdir -p ${APP_ROOT}/var; \
-      apk add --update --no-cache \
-        rsync \
-        mqtt-exec;
+      apk add --no-cache \
+        rsync; \
+      apk --no-cache upgrade;
 
   # :: copy root filesystem changes and add execution rights to init scripts
     COPY --chown=1000:1000 ./rootfs /
