@@ -1,5 +1,5 @@
-log_format alpine_mirror_proxy escape=json '{"app":"nginx","destination":"remote", "client":{"ip":"$remote_addr", "x-forwarded-for":"$http_x_forwarded_for", "user":"$remote_user"}, "url":"$request_uri", "status":$status, "time":"$time_iso8601"}';
-log_format alpine_mirror_local escape=json '{"app":"nginx","destination":"local", "client":{"ip":"$remote_addr", "x-forwarded-for":"$http_x_forwarded_for", "user":"$remote_user"}, "url":"$request_uri", "status":$status, "time":"$time_iso8601"}';
+log_format alpine_mirror_local escape=json '{"app":"nginx","destination":"local","time":"$time_iso8601","server":{"name":"$server_name", "protocol":"$server_protocol"}, "client":{"ip":"$remote_addr", "x-forwarded-for":"$http_x_forwarded_for", "user":"$remote_user"},"request":{"method":"$request_method", "url":"$request_uri", "time":"$request_time", "status":$status}}';
+log_format alpine_mirror_proxy escape=json '{"app":"nginx","destination":"remote", "time":"$time_iso8601","server":{"name":"$server_name", "protocol":"$server_protocol"}}, "client":{"ip":"$remote_addr", "x-forwarded-for":"$http_x_forwarded_for", "user":"$remote_user"},"request":{"method":"$request_method", "url":"$request_uri", "time":"$request_time", "status":$status}, "proxy":{"host":"$upstream_addr", "time":{"connect":"$upstream_connect_time", "response":"$upstream_response_time", "header":"$upstream_header_time"}, "io":{"bytes":{"sent":"$upstream_bytes_sent", "received":"$upstream_bytes_received"}}, "cache":"$upstream_cache_status", "status":"$upstream_status"}}';
 
 map $request $alpine_mirror_log {
     ~*/v[0-9]+ 1;
@@ -16,7 +16,7 @@ server {
 
   location / {
     access_log /var/log/nginx/access.log alpine_mirror_proxy if=$alpine_mirror_log;
-    resolver 9.9.9.9 149.112.112.112;
+    resolver 9.9.9.10 149.112.112.10;
     proxy_pass http://dl-cdn.alpinelinux.org/alpine$request_uri;
   } 
 
