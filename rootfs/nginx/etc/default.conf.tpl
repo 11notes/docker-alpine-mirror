@@ -16,7 +16,7 @@ server {
 
   location / {
     access_log /var/log/nginx/access.log alpine_mirror_proxy if=$alpine_mirror_log;
-    resolver 9.9.9.10 149.112.112.10;
+    resolver 9.9.9.10 149.112.112.10 ipv6=off;
     proxy_pass http://dl-cdn.alpinelinux.org/alpine$request_uri;
   } 
 
