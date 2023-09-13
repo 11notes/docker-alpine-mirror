@@ -27,12 +27,12 @@ docker run --name mirror \
 
 ## Use
 ```shell
-docker exec mirror cache
+docker exec mirror cache sync
 ```
 This will start the caching of all versions present in /mirror/var. You can call this in a regular interval or listen to the MQTT events on msg.alpinelinux.org.
 
 ```shell
-docker exec mirror size
+docker exec mirror cache size
 ```
 Will output the size in GB that you will sync from the CDN.
 
