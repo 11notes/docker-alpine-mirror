@@ -1,5 +1,5 @@
 #!/bin/ash
-  if [ -z "${1}" ]; then
+  if [ ! -z "${1}" ]; then
     log-json info "starting alpine mirror"
     MIRROR_LOCATIONS=""
     DNS=${DNS:-"9.9.9.9 149.112.112.112"}
