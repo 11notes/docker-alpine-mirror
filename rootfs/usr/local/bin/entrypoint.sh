@@ -6,6 +6,7 @@
 
     for VERSION in "$@"; do
       mkdir -p ${APP_ROOT}/var/${VERSION}
+      log-json info "alpine version ${VERSION} will be cached locally"
       VERSION_ESC=$(echo ${VERSION} | sed "s/\./\\\./")
       MIRROR_LOCATIONS="${MIRROR_LOCATIONS}location ~* /${VERSION_ESC} { access_log /var/log/nginx/access.log alpine_mirror_local if=\$alpine_mirror_log; }\n\  "
     done
