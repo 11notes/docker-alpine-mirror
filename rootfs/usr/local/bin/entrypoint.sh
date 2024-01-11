@@ -1,15 +1,24 @@
 #!/bin/ash
-  NGINX_INCLUDE=""
-  if [ -z "${DNS_NAMESERVERS}" ]; then DNS_NAMESERVERS="208.67.222.222 208.67.220.220"; fi
+  if [ -z "${1}" ]; then
+    log-json info "starting alpine mirror"
+    MIRROR_LOCATIONS=""
+    DNS=${DNS:-"9.9.9.9 149.112.112.112"}
 
-  for VERSION in "$@"; do
-    mkdir -p /mirror/var/${VERSION}
-    VERSION_ESC=$(echo ${VERSION} | sed "s/\./\\\./")
-    NGINX_INCLUDE="${NGINX_INCLUDE}location ~* /${VERSION_ESC} { access_log /var/log/nginx/access.log alpine_mirror_local if=\$alpine_mirror_log; }\n\  "
-  done
+    for VERSION in "$@"; do
+      mkdir -p ${APP_ROOT}/var/${VERSION}
+      VERSION_ESC=$(echo ${VERSION} | sed "s/\./\\\./")
+      MIRROR_LOCATIONS="${MIRROR_LOCATIONS}location ~* /${VERSION_ESC} { access_log /var/log/nginx/access.log alpine_mirror_local if=\$alpine_mirror_log; }\n\  "
+    done
 
-  cp /nginx/etc/default.conf.tpl /nginx/etc/default.conf
-  sed -i "s#\$INCLUDE#${NGINX_INCLUDE}#" /nginx/etc/default.conf
-  sed -i "s#\$DNS_NAMESERVERS#${DNS_NAMESERVERS}#" /nginx/etc/default.conf
+    cp /etc/mirror.conf /nginx/etc/default.conf
+    sed -i "s#\$INCLUDE#${MIRROR_LOCATIONS}#" /nginx/etc/default.conf
+    sed -i "s#\$DNS#${DNS}#" /nginx/etc/default.conf
 
-  exec nginx -g 'daemon off;'
+    HEALTHCHECK_URL="http://localhost:8080/ping"
+
+    set -- "nginx" \
+      -g \
+      'daemon off;'
+  fi
+
+  exec "$@"

@@ -1,6 +1,6 @@
 #!/bin/ash
   SOURCE="rsync://rsync.alpinelinux.org/alpine"
-  DESTINATION="/mirror/var"
+  DESTINATION="${APP_ROOT}/var"
 
   RSYNC_INCLUDE=""
   GREP_MATCH=""
@@ -20,7 +20,7 @@
     sync)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         if [ ! $(pgrep -x rsync) ]; then
-          echo "{\"app\":\"mirror\",\"message\":\"start syncing (full)\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
+          log-json info "start syncing (full)"
           /usr/bin/rsync \
             --info=progress2 \
             --archive \
@@ -34,7 +34,7 @@
             --exclude='*' \
             ${SOURCE}/ ${DESTINATION}
         else
-          echo "{\"app\":\"mirror\",\"message\":\"could not start additional sync, sync already running\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
+          log-json warning "could not start additional sync, sync already running"
         fi
       fi
     ;;
@@ -42,7 +42,7 @@
     size)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         RSYNC_SIZE=$(rsync -anh --stats ${RSYNC_INCLUDE} --exclude='*' ${SOURCE}/ /tmp | sed -n "s/Total file size: \(\S*\) bytes/\1/p")
-        echo "{\"app\":\"mirror\",\"message\":\"size to be synced ${RSYNC_SIZE}\", \"time\":\"$(date +'%Y-%m-%dT%H:%M:%S%z')\"}" >> /var/log/nginx/access.log
+        log-json info "size to be synced ${RSYNC_SIZE}"
       fi
     ;;
   esac

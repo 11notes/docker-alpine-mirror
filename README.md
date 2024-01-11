@@ -29,7 +29,7 @@ docker run --name mirror \
 ## Environment
 | Parameter | Value | Default |
 | --- | --- | --- |
-| `DNS_NAMESERVERS` | space separated list of DNS servers | 208.67.222.222 208.67.220.220 |
+| `DNS` | space separated list of DNS servers | 9.9.9.9 149.112.112.112 |
 
 ## Use
 ```shell
