@@ -8,7 +8,7 @@
 
 # :: Header
   FROM 11notes/nginx:stable
-  COPY --from=util /util/linux/shell/log-json /usr/local/bin
+  COPY --from=util /util/linux/shell/elevenLogJSON /usr/local/bin
   ENV APP_ROOT=/mirror
 
 # :: Run
@@ -20,7 +20,9 @@
       mkdir -p ${APP_ROOT}/var; \
       apk add --no-cache \
         rsync; \
-      apk --no-cache upgrade;
+      apk --no-cache upgrade; \
+      rm -rf /etc/nginx/nginx.conf; \
+      rm -rf /nginx/etc/default.conf;
 
   # :: copy root filesystem changes and add execution rights to init scripts
     COPY --chown=1000:1000 ./rootfs /
@@ -34,7 +36,10 @@
         ${APP_ROOT};
 
 # :: Volumes
-VOLUME ["${APP_ROOT}/etc", "${APP_ROOT}/var"]
+  VOLUME ["${APP_ROOT}/etc", "${APP_ROOT}/var"]
+
+# :: Ports
+  EXPOSE 8080/tcp
 
 # :: Start
-USER docker
+  USER docker

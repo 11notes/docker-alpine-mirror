@@ -1,24 +1,33 @@
-# Alpine :: Mirror
-Run an Alpine Mirror based on Alpine Linux. Small, lightweight, secure and fast 🏔️
+![Banner](https://github.com/11notes/defaults/blob/main/static/img/banner.png?raw=true)
 
-The mirror will only cache the versions you specified during start or the folders which are present in /mirror/var. All others versions will be proxies to the default CDN.
+# 🏔️ Alpine - Alpine Mirror
+![size](https://img.shields.io/docker/image-size/11notes/alpine-mirror/stable?color=0eb305) ![version](https://img.shields.io/docker/v/11notes/alpine-mirror/stable?color=eb7a09) ![pulls](https://img.shields.io/docker/pulls/11notes/alpine-mirror?color=2b75d6) ![stars](https://img.shields.io/docker/stars/11notes/alpine-mirror?color=e6a50e) [<img src="https://img.shields.io/badge/github-11notes-blue?logo=github">](https://github.com/11notes)
 
-## Volumes
+**Run your own Alpine mirror for all your Alpine installations**
+
+# SYNOPSIS
+What can I do with this? Host a local Alpine mirror. The mirror will only cache the versions you specified during start or the folders which are present in /mirror/var. All others versions will be proxied to the default CDN of Alpine.
+
+# VOLUMES
 * **/mirror/etc** - Directory of additional nginx configurations
 * **/mirror/var** - Directory of all mirror data
 
-## Run
-```shell
-docker run --name mirror \
-  -v ../etc:/mirror/etc \
-  -v ../var:/mirror/var \
-  -d 11notes/alpine-mirror:[tag] \
-    v3.16 \
-    v3.17 \
-    v3.18
+# COMPOSE
+```yaml
+services:
+  alpine-mirror:
+    image: "11notes/alpine-mirror:stable"
+    container_name: "alpine-mirror"
+    command: [ "v3.19", "v3.20" ]
+    ports:
+      - "8080:8080"
+    volumes:
+      - "var:/mirror/var"
+volumes:
+  var:
 ```
 
-## Defaults
+# DEFAULT SETTINGS
 | Parameter | Value | Description |
 | --- | --- | --- |
 | `user` | docker | user docker |
@@ -26,25 +35,25 @@ docker run --name mirror \
 | `gid` | 1000 | group id 1000 |
 | `home` | /mirror | home directory of user docker |
 
-## Environment
+# ENVIRONMENT
 | Parameter | Value | Default |
 | --- | --- | --- |
-| `DNS` | space separated list of DNS servers | 9.9.9.9 149.112.112.112 |
+| `TZ` | [Time Zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) | |
+| `DEBUG` | Show debug information | |
+| `DNS` | space separated list of DNS servers | 9.9.9.10 8.8.4.4 |
 
-## Use
-```shell
-docker exec mirror cache sync
-```
-This will start the caching of all versions present in /mirror/var. You can call this in a regular interval or listen to the MQTT events on msg.alpinelinux.org.
+# PARENT IMAGE
+* [11notes/nginx:stable](https://hub.docker.com/r/11notes/nginx)
 
-```shell
-docker exec mirror cache size
-```
-Will output the size in GB that you will sync from the CDN.
+# BUILT WITH
+* [alpine mirror](https://dl-cdn.alpinelinux.org/alpine)
+* [alpine](https://alpinelinux.org)
 
-## Parent
-* [11notes/nginx:stable](https://github.com/11notes/docker-nginx)
+# TIPS
+* Allow non-root ports < 1024 via `echo "net.ipv4.ip_unprivileged_port_start={n}" > /etc/sysctl.d/ports.conf`
+* Use a reverse proxy like Traefik, Nginx to terminate TLS with a valid certificate
+* Use Let’s Encrypt certificates to protect your SSL endpoints
 
-## Built with
-* [Alpine Linux Mirror](https://dl-cdn.alpinelinux.org/alpine)
-* [Alpine Linux](https://alpinelinux.org)
+# ElevenNotes<sup>™️</sup>
+This image is provided to you at your own risk. Always make backups before updating an image to a new version. Check the changelog for breaking changes. You can find all my repositories on [github](https://github.com/11notes).
+    

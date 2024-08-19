@@ -1,0 +1,11 @@
+services:
+  alpine-mirror:
+    image: "11notes/alpine-mirror:stable"
+    container_name: "alpine-mirror"
+    command: [ "v3.19", "v3.20" ]
+    ports:
+      - "8080:8080"
+    volumes:
+      - "var:/mirror/var"
+volumes:
+  var:
