@@ -14,6 +14,7 @@
   COPY --from=qemu /usr/bin/qemu-aarch64-static /usr/bin
   COPY --from=util /util/linux/shell/elevenLogJSON /usr/local/bin
   ENV APP_ROOT=/mirror
+  ENV APP_NAME="alpine-mirror"
 
 # :: Run
   USER root
