@@ -1,0 +1,11 @@
+image: 11notes/alpine-mirror:stable
+manifests:
+  - image: 11notes/alpine-mirror:amd64-stable
+    platform:
+      architecture: amd64
+      os: linux
+  - image: 11notes/alpine-mirror:arm64v8-stable
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
