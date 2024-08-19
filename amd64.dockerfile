@@ -21,7 +21,6 @@
       apk add --no-cache \
         rsync; \
       apk --no-cache upgrade; \
-      rm -rf /etc/nginx/nginx.conf; \
       rm -rf /nginx/etc/default.conf;
 
   # :: copy root filesystem changes and add execution rights to init scripts
