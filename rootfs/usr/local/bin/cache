@@ -20,7 +20,7 @@
     sync)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         if [ ! $(pgrep -x rsync) ]; then
-          log-json info "start syncing (full)"
+          elevenLogJSON info "start syncing (full)"
           /usr/bin/rsync \
             --info=progress2 \
             --archive \
@@ -34,7 +34,7 @@
             --exclude='*' \
             ${SOURCE}/ ${DESTINATION}
         else
-          log-json warning "could not start additional sync, sync already running"
+          elevenLogJSON warning "could not start additional sync, sync already running"
         fi
       fi
     ;;
@@ -42,7 +42,7 @@
     size)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         RSYNC_SIZE=$(rsync -anh --stats ${RSYNC_INCLUDE} --exclude='*' ${SOURCE}/ /tmp | sed -n "s/Total file size: \(\S*\) bytes/\1/p")
-        log-json info "size to be synced ${RSYNC_SIZE}"
+        elevenLogJSON info "size to be synced ${RSYNC_SIZE}"
       fi
     ;;
   esac
