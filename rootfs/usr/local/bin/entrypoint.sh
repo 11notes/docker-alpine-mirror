@@ -14,7 +14,8 @@
     sed -i "s#\$INCLUDE#${MIRROR_LOCATIONS}#" /nginx/etc/default.conf
     sed -i "s#\$DNS#${DNS}#" /nginx/etc/default.conf
 
-    HEALTHCHECK_URL="http://localhost:8080/ping"
+    elevenLogJSON info "starting mqtt listener for dynamic sync events"
+    mqtt-exec -h "msg.alpinelinux.org" -t "rsync/rsync.alpinelinux.org/#" -- /usr/local/bin/cache sync mqtt &
 
     elevenLogJSON info "starting ${APP_NAME}"
     set -- "nginx" \

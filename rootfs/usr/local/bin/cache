@@ -20,7 +20,11 @@
     sync)
       if [ ! -z "${RSYNC_INCLUDE}" ]; then
         if [ ! $(pgrep -x rsync) ]; then
-          elevenLogJSON info "start syncing (full)"
+          if [ ! -z "${2}" ]; then
+            elevenLogJSON info "start syncing (full) via mqtt trigger"
+          else
+            elevenLogJSON info "start syncing (full)"
+          fi
           /usr/bin/rsync \
             --info=progress2 \
             --archive \

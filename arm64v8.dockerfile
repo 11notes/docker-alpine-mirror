@@ -15,6 +15,7 @@
   COPY --from=util /util/linux/shell/elevenLogJSON /usr/local/bin
   ENV APP_ROOT=/mirror
   ENV APP_NAME="alpine-mirror"
+  ENV HEALTHCHECK_URL="http://localhost:8080/ping"
 
 # :: Run
   USER root
@@ -23,8 +24,9 @@
     RUN set -ex; \
       mkdir -p ${APP_ROOT}/etc; \
       mkdir -p ${APP_ROOT}/var; \
-      apk add --no-cache \
-        rsync; \
+      apk add --no-cache --update \
+        rsync \
+        mqtt-exec; \
       apk --no-cache upgrade; \
       rm -rf /nginx/etc/default.conf;
 
