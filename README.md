@@ -6,7 +6,7 @@
 **Run your own Alpine mirror for all your Alpine installations**
 
 # SYNOPSIS
-What can I do with this? Host a local Alpine mirror. The mirror will only cache the versions you specified during start or the folders which are present in /mirror/var. All others versions will be proxied to the default CDN of Alpine.
+What can I do with this? Host a local Alpine mirror. The mirror will only cache the versions you specified during start or the folders which are present in /mirror/var. All others versions will be proxied to the default CDN of Alpine. The mirror will auto update all packages if new packages are pushed by the Alpine team.
 
 # VOLUMES
 * **/mirror/etc** - Directory of additional nginx configurations
